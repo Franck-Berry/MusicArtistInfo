@@ -246,7 +246,7 @@ PLUGIN_MUSICARTISTINFO_ARTISTPHOTOS_FOLDER
 	EN	Folder with artist photos
 	FR	Dossier pour les photos d'artistes
 	HU	Előadó képeinek mappája
-	NL	Map met foto's van artiesten
+	NL	Map voor foto's van artiesten
 
 PLUGIN_MUSICARTISTINFO_ARTISTPHOTOS_FOLDER_DESC
 	CS	Pokud se rozhodnete použít složku pro fotografie interpretů, bude použita jako další zdroj obrázků. Použijte názvy souborů jako %ARTIST.jpg (png, gif, např. „Peter Gabriel.jpg“). Pokud se soubor v této složce najde, nebude použit žádný online zdroj.
@@ -264,7 +264,7 @@ PLUGIN_MUSICARTISTINFO_REVIEWS_FOLDER
 	EN	Folder with album reviews
 	FR	Dossier pour les critiques d'albums
 	HU	Albumismertetők mappa
-	NL	Map met recensies
+	NL	Map voor recensies
 
 PLUGIN_MUSICARTISTINFO_REVIEWS_FOLDER_DESC
 	CS	Pokud se rozhodnete použít složku pro recenze alb, bude použita jako další zdroj textového obsahu. Použijte názvy souborů jako %ARTIST/%ALBUM.txt (html, nfo, např. „Peter Gabriel/So.html“). Pokud se soubor v této složce najde, nebude použit žádný online zdroj.
@@ -282,7 +282,7 @@ PLUGIN_MUSICARTISTINFO_BIOS_FOLDER
 	EN	Folder with biographies
 	FR	Dossier pour les biographies
 	HU	Életrajzok mappa
-	NL	Map met biografieën
+	NL	Map voor biografieën
 
 PLUGIN_MUSICARTISTINFO_BIOS_FOLDER_DESC
 	CS	Pokud se rozhodnete použít složku pro biografie, bude použita jako další zdroj textového obsahu. Použijte názvy souborů jako %ARTIST.txt (html, nfo, např. „Peter Gabriel.html“). Pokud se soubor v této složce najde, nebude použit žádný online zdroj.
@@ -415,7 +415,7 @@ PLUGIN_MUSICARTISTINFO_IMPORTER_PLACEHOLDER_0
 	DE	Keine Platzhalter-Datei speichern.
 	EN	Don't store any placeholder file.
 	FR	Ne pas enregistrer de fichier de remplacement.
-	NL	Geen tijdelijke aanduidingsbestand opslaan.
+	NL	Maak geen ("artist.missing") bestanden aan.
 
 PLUGIN_MUSICARTISTINFO_IMPORTER_PLACEHOLDER_1
 	CS	Uložit zástupný soubor („artist.missing“), pokud mají být staženy obrázky interpretů, ale nemohou být nalezeny
@@ -424,13 +424,13 @@ PLUGIN_MUSICARTISTINFO_IMPORTER_PLACEHOLDER_1
 	EN	Store placeholder file ("artist.missing") if artist pictures are to be downloaded, but cannot be found.
 	FR	Enregistrer un fichier "artiste.missing" pour les artistes dont la photo a été recherchée mais pas trouvée.
 	HU	Tárolja a helyőrző fájlt ("artist.missing"), ha az előadói képeket le kell tölteni, de nem találhatók.
-	NL	Maak een bestand ("artist.missing") aan als de foto van de artiest dient te worden gedownload maar niet kan worden gevonden.
+	NL	Maak een bestand ("artist.missing") aan, als de foto van de artiest dient te worden gedownload maar niet kan worden gevonden.
 
 PLUGIN_MUSICARTISTINFO_IMPORTER_PLACEHOLDER_2
 	DE	Speichere Platzhalter-Datei für all Rollen (nicht nur Interpreten, sondern auch Dirigenten, Solisten etc.).
 	EN	Store placeholder not only for main artist, but all contributors (composers, soloists, etc.)
 	FR	Enregistrer un fichier "artiste.missing" non seulement pour l'artiste principal, mais aussi pour tous les contributeurs (compositeurs, solistes, etc.)
-	NL	Sla een tijdelijke aanduiding op, niet alleen voor de hoofdartiest, maar voor alle bijdragers (componisten, solisten, enz.)
+	NL	Maak een bestand ("artist.missing") aan, niet alleen voor de artiest, maar voor alle uitvoerenden (componisten, solisten, enz.)
 
 PLUGIN_MUSICARTISTINFO_IMPORTER_COVERART
 	CS	Stáhnout chybějící obaly alb z online zdrojů
