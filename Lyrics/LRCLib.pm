@@ -23,7 +23,7 @@ use constant PROXYING_PERIOD => 60 * 60;    # reset proxying after an hour, to s
 
 my $log = logger('plugin.musicartistinfo');
 my $prefs = preferences('plugin.musicartistinfo');
-my $baseUrl = BASE_URL;
+my $useLRCProxy = 0;
 
 sub getLyrics {
 	my ( $class, $args, $cb ) = @_;
@@ -123,14 +123,14 @@ sub _call {
 
 	my $startTime = Time::HiRes::time();
 
-	Plugins::MusicArtistInfo::Common->call(
-		$baseUrl . $url,
+	__call(
+		$url,
 		sub {
 			my ($result) = @_;
 
-			if ($baseUrl eq BASE_URL && Time::HiRes::time() - $startTime > MAX_LAG_BEFORE_PROXYING) {
+			if (!$useLRCProxy && Time::HiRes::time() - $startTime > MAX_LAG_BEFORE_PROXYING) {
 				main::INFOLOG && $log->is_info && $log->info("LRCLib is taking a long time to respond - enabling proxying");
-				$baseUrl = BASE_URL_PROXIED;
+				$useLRCProxy = 1;
 
 				# but don't proxy forever...
 				Slim::Utils::Timers::killTimers(__PACKAGE__, \&_resetProxying);
@@ -147,8 +147,19 @@ sub _call {
 	);
 }
 
+sub __call {
+	my $url = shift;
+
+	if ($useLRCProxy) {
+		Plugins::MusicArtistInfo::API::_call(BASE_URL_PROXIED . $url, @_);
+	}
+	else {
+		Plugins::MusicArtistInfo::Common->call(BASE_URL . $url, @_);
+	}
+}
+
 sub _resetProxying {
-	$baseUrl = BASE_URL;
+	$useLRCProxy = 0;
 	main::INFOLOG && $log->is_info && $log->info("LRCLib proxying disabled again");
 }
 
