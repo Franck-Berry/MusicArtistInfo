@@ -128,7 +128,7 @@ sub _call {
 		sub {
 			my ($result) = @_;
 
-			if (!$useLRCProxy && Time::HiRes::time() - $startTime > MAX_LAG_BEFORE_PROXYING) {
+			if (!_useLRCProxy() && Time::HiRes::time() - $startTime > MAX_LAG_BEFORE_PROXYING) {
 				main::INFOLOG && $log->is_info && $log->info("LRCLib is taking a long time to respond - enabling proxying");
 				$useLRCProxy = 1;
 
@@ -150,7 +150,7 @@ sub _call {
 sub __call {
 	my $url = shift;
 
-	if ($useLRCProxy) {
+	if (_useLRCProxy()) {
 		Plugins::MusicArtistInfo::API::_call(BASE_URL_PROXIED . $url, @_);
 	}
 	else {
@@ -161,6 +161,10 @@ sub __call {
 sub _resetProxying {
 	$useLRCProxy = 0;
 	main::INFOLOG && $log->is_info && $log->info("LRCLib proxying disabled again");
+}
+
+sub _useLRCProxy {
+	return $useLRCProxy || $prefs->get('forceLRCProxy');
 }
 
 1;
