@@ -13,7 +13,7 @@ use Slim::Utils::Prefs;
 use constant BASE_URL => 'https://lrclib.net/api/';
 # use constant BASE_URL_PROXIED => 'http://localhost:8787/music/LRCLibProxy/';
 use constant BASE_URL_PROXIED => 'https://api.lms-community.org/music/LRCLibProxy/';
-use constant GET_URL => 'get?artist_name=%s&track_name=%s&album_name=%s&duration=%s';
+use constant GET_URL => 'get?artist_name=%s&track_name=%s';
 use constant SEARCH_URL => 'search?artist_name=%s&track_name=%s&album_name=%s';
 
 # if we have different durations in a search result, accept a maximum difference of X seconds
@@ -28,10 +28,14 @@ my $useLRCProxy = 0;
 sub getLyrics {
 	my ( $class, $args, $cb ) = @_;
 
-	return $cb->() unless $args->{artist} && $args->{title} && $args->{album} && $args->{duration};
+	return $cb->() unless $args->{artist} && $args->{title};
+
+	my $url = sprintf(GET_URL, uri_escape_utf8($args->{artist}), uri_escape_utf8($args->{title}), uri_escape_utf8($args->{album}), $args->{duration});
+	$url .= '&album_name=' . $args->{album} if $args->{album};
+	$url .= '&duration=' . $args->{duration} if $args->{duration};
 
 	_call(
-		sprintf(GET_URL, uri_escape_utf8($args->{artist}), uri_escape_utf8($args->{title}), uri_escape_utf8($args->{album} || '.'), $args->{duration} || 1),
+		$url,
 		sub {
 			my $result = shift;
 

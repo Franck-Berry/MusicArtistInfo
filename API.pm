@@ -16,9 +16,10 @@ use constant ARTISTIMAGESEARCH_URL => BASE_URL . '/artist/%s/picture';
 use constant ALBUMREVIEW_URL => BASE_URL . '/album/%s/%s/review';
 use constant TRACKREVIEW_URL => BASE_URL . '/track/%s/%s/review';
 use constant ALBUMGENRES_URL => BASE_URL . '/album/%s/%s/genres';
-use constant BIOGRAPHY_URL => BASE_URL . '/artist/%s/biography';
-use constant WORKREVIEW_URL => BASE_URL . '/work/%s/%s/review';
+use constant BIOGRAPHY_URL   => BASE_URL . '/artist/%s/biography';
+use constant WORKREVIEW_URL  => BASE_URL . '/work/%s/%s/review';
 use constant LYRICS_PROVIDERS_URL => BASE_URL . '/metadata/lyricsProviders';
+use constant KILLWORDS_URL   => BASE_URL . '/metadata/killwords';
 
 use constant PLUGIN_PACKAGE => __PACKAGE__ =~ s/\b(?:\w+)$/Plugin/r;
 
@@ -203,6 +204,20 @@ sub getLyricsProviders {
 			cache => 0
 		}
 	);
+}
+
+sub getKillwords {
+	my ( $class, $cb ) = @_;
+
+	_call(
+		KILLWORDS_URL,
+		sub {
+			$cb->(shift);
+		},
+		{
+			cache => 1,
+		}
+	)
 }
 
 sub hasHitRateLimit {

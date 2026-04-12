@@ -283,6 +283,12 @@ my $lyricsProvider = {
 sub _fetchLyrics {
 	my ($args, $cb, $ecb) = @_;
 
+	if (length($args->{title}) > 50 && length($args->{artist}) > 50) {
+		main::INFOLOG && $log->is_info && $log->info("Not looking up lyrics for very long title or artist");
+		$cb->({});
+		return;
+	}
+
 	# some cleanup... music services add too many appendices
 	$args->{title} =~ s/[([][^)\]]*?(deluxe|edition|remaster|live|anniversary)[^)\]]*?[)\]]//ig;
 	$args->{title} =~ s/ -[^-]*(deluxe|edition|remaster|live|anniversary).*//ig;
@@ -293,6 +299,11 @@ sub _fetchLyrics {
 	# remove trailing non-word characters
 	$args->{title} =~ s/[\s\W]{2,}$//;
 	$args->{title} =~ s/\s*$//;
+
+	if ($args->{album}) {
+		my $killWords = Plugins::MusicArtistInfo::Common::getKillWords();
+		$args->{album} = '' if $killWords && ref $killWords && $killWords->{lc($args->{album})};
+	}
 
 	my $lyricsResult;
 

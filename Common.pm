@@ -58,6 +58,7 @@ my $log = Slim::Utils::Log->addLogCategory( {
 my $prefs = preferences('plugin.musicartistinfo');
 
 my $ua;
+my %killWords = ();
 
 # delay requests in case of 429s
 my $delay = 0;
@@ -79,6 +80,26 @@ sub getContentLanguages {
 	return [ keys %$contentLanguages ];
 }
 
+sub getKillWords { \%killWords }
+
+sub updateKillWords {
+	my $class = shift;
+
+	Plugins::MusicArtistInfo::API->getKillwords(
+		sub {
+			my $killWordsList = shift;
+
+			if ($killWordsList && ref $killWordsList eq 'HASH' && scalar @{$killWordsList->{killWords} || []}) {
+				%killWords = map { $_ => 1 } @{$killWordsList->{killWords}};
+			}
+		},
+		{
+			cache => 1,
+		}
+	);
+}
+
+
 sub cleanupAlbumName {
 	my $album = shift;
 
@@ -86,6 +107,8 @@ sub cleanupAlbumName {
 	my $fullAlbum = $album;
 
 	main::INFOLOG && $log->info("Cleaning up album name: '$album'");
+
+	$album = '' if $killWords{lc($album)};
 
 	# remove everything between (), {} or []... But don't for PG's eponymous first four albums :-)
 	$album =~ s/(?<!^)[(\[{].*?[}\])]//g if $album !~ /Peter Gabriel .*\b(?:[1-4]|Car|Scratch|Melt|Security)\b/i && $album !~ /beatles.*white album/i;

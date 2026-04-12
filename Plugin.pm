@@ -96,6 +96,8 @@ sub initPlugin {
 	}
 
 	$class->SUPER::initPlugin(shift);
+
+	Slim::Utils::Timers::setTimer( 'Plugins::MusicArtistInfo::Common', Time::HiRes::time() + 3 + rand(5), \&Plugins::MusicArtistInfo::Common::updateKillWords );
 }
 
 # don't add this plugin to the Extras menu
