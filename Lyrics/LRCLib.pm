@@ -14,7 +14,7 @@ use constant BASE_URL => 'https://lrclib.net/api/';
 # use constant BASE_URL_PROXIED => 'http://localhost:8787/music/LRCLibProxy/';
 use constant BASE_URL_PROXIED => 'https://api.lms-community.org/music/LRCLibProxy/';
 use constant GET_URL => 'get?artist_name=%s&track_name=%s';
-use constant SEARCH_URL => 'search?artist_name=%s&track_name=%s&album_name=%s';
+use constant SEARCH_URL => 'search?artist_name=%s&track_name=%s';
 
 # if we have different durations in a search result, accept a maximum difference of X seconds
 use constant MAX_DURATION_DIFF => 5;
@@ -25,17 +25,25 @@ my $log = logger('plugin.musicartistinfo');
 my $prefs = preferences('plugin.musicartistinfo');
 my $useLRCProxy = 0;
 
+sub _buildQueryParameters {
+	my ($urlTemplate, $args) = @_;
+
+	my $url = sprintf($urlTemplate, uri_escape_utf8($args->{artist}), uri_escape_utf8($args->{title}));
+
+	$url .= '&album_name=' . uri_escape_utf8($args->{album}) if $args->{album};
+	$url .= '&duration=' . uri_escape_utf8($args->{duration}) if $args->{duration};
+
+	return $url;
+}
+
+
 sub getLyrics {
 	my ( $class, $args, $cb ) = @_;
 
 	return $cb->() unless $args->{artist} && $args->{title};
 
-	my $url = sprintf(GET_URL, uri_escape_utf8($args->{artist}), uri_escape_utf8($args->{title}));
-	$url .= '&album_name=' . uri_escape_utf8($args->{album}) if $args->{album};
-	$url .= '&duration=' . uri_escape_utf8($args->{duration}) if $args->{duration};
-
 	_call(
-		$url,
+		_buildQueryParameters(GET_URL, $args),
 		sub {
 			my $result = shift;
 
@@ -61,7 +69,7 @@ sub searchLyrics {
 	return $cb->() unless $args->{artist} && $args->{title};
 
 	_call(
-		sprintf(SEARCH_URL, uri_escape_utf8($args->{artist}), uri_escape_utf8($args->{title}), uri_escape_utf8($args->{album})),
+		_buildQueryParameters(SEARCH_URL, $args),
 		sub {
 			my $result = shift;
 
