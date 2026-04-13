@@ -24,7 +24,7 @@ my $lyricsProviderPipeline = [
 	# 'AZLyrics',
 	'LRCLibGet',
 	'LRCLibSearch',
-	'ChartLyrics',
+	# 'ChartLyrics',
 	'Genius',
 	'GeniusNoDot',
 ];
