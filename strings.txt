@@ -588,3 +588,7 @@ PLUGIN_MUSICARTISTINFO_LANGUAGE_DEFAULT
 	EN	Automatic
 	FR	Automatique
 	NL	Automatisch
+
+PLUGIN_MUSICARTISTINFO_INSTRUMENTAL
+	EN	Intrumental
+	NL	Instrumentaal

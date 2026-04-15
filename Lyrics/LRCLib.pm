@@ -8,6 +8,7 @@ use Time::HiRes;
 
 use Slim::Utils::Log;
 use Slim::Utils::Prefs;
+use Slim::Utils::Strings;
 
 # LRCLib used to hang responses, therefore we used a proxy. But that seems to no longer be needed
 use constant BASE_URL => 'https://lrclib.net/api/';
@@ -24,6 +25,8 @@ use constant PROXYING_PERIOD => 60 * 60;    # reset proxying after an hour, to s
 my $log = logger('plugin.musicartistinfo');
 my $prefs = preferences('plugin.musicartistinfo');
 my $useLRCProxy = 0;
+my $instrumentalString;
+
 
 sub _buildQueryParameters {
 	my ($urlTemplate, $args) = @_;
@@ -47,11 +50,13 @@ sub getLyrics {
 		sub {
 			my $result = shift;
 
-			if ($result && ref $result && ($result->{plainLyrics} || $result->{syncedLyrics})) {
+			if ($result && ref $result && ($result->{plainLyrics} || $result->{syncedLyrics} || $result->{instrumental})) {
+				$instrumentalString ||= Slim::Utils::Strings::string('PLUGIN_MUSICARTISTINFO_INSTRUMENTAL');
+
 				return $cb->({
 					song => $args->{title},
 					artist => $args->{artist},
-					lyrics => $result->{syncedLyrics} || $result->{plainLyrics},
+					lyrics => $result->{syncedLyrics} || $result->{plainLyrics} || $instrumentalString,
 				});
 			}
 
@@ -79,7 +84,7 @@ sub searchLyrics {
 				my $duration = $args->{duration};
 
 				$result = [ grep {
-					$_ && ref $_ && ($_->{plainLyrics} || $_->{syncedLyrics})
+					$_ && ref $_ && ($_->{plainLyrics} || $_->{syncedLyrics} || $_->{instrumental})
 				} @$result ];
 
 				my $useSynced;
@@ -116,10 +121,12 @@ sub searchLyrics {
 					$useSynced = abs($lyrics->{duration} - $duration) <= MAX_DURATION_DIFF;
 				}
 
+				$instrumentalString ||= Slim::Utils::Strings::string('PLUGIN_MUSICARTISTINFO_INSTRUMENTAL');
+
 				return $cb->({
 					song => $lyrics->{title},
 					artist => $lyrics->{artist},
-					lyrics => ($useSynced && $lyrics->{syncedLyrics}) || $lyrics->{plainLyrics},
+					lyrics => ($useSynced && $lyrics->{syncedLyrics}) || $lyrics->{plainLyrics} || $instrumentalString,
 				}) if $lyrics;
 			}
 

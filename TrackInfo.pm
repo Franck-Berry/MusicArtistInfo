@@ -192,6 +192,7 @@ sub getSongLyricsCLI {
 	}
 
 	if (my $lyrics = _getCachedLyrics($args) || _getLocalLyrics($args)) {
+		main::INFOLOG && $log->is_info && $log->info("Found cached/local lyrics for " . $args->{title} . ' by ' . $args->{artist});
 		_renderLyricsResponse($lyrics, $request, $args);
 		$request->setStatusDone();
 		return;
