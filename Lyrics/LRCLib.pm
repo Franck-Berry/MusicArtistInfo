@@ -19,13 +19,15 @@ use constant SEARCH_URL => 'search?artist_name=%s&track_name=%s';
 
 # if we have different durations in a search result, accept a maximum difference of X seconds
 use constant MAX_DURATION_DIFF => 5;
-use constant MAX_LAG_BEFORE_PROXYING => 5;
+use constant MAX_LAG_BEFORE_PROXYING_SECS => 5;
 use constant PROXYING_PERIOD => 60 * 60;    # reset proxying after an hour, to see whether the situation has improved
+use constant REQUESTS_TO_AVERAGE => 5;      # number of requests to average response time over before deciding to proxy
 
 my $log = logger('plugin.musicartistinfo');
 my $prefs = preferences('plugin.musicartistinfo');
 my $useLRCProxy = 0;
 my $instrumentalString;
+my $avgResponseTimeInSecs = 1;
 
 
 sub _buildQueryParameters {
@@ -147,7 +149,12 @@ sub _call {
 		sub {
 			my ($result) = @_;
 
-			if (!_useLRCProxy() && Time::HiRes::time() - $startTime > MAX_LAG_BEFORE_PROXYING) {
+			my $responseTime = Time::HiRes::time() - $startTime;
+			$avgResponseTimeInSecs = ($avgResponseTimeInSecs * (REQUESTS_TO_AVERAGE - 1) + $responseTime) / REQUESTS_TO_AVERAGE;
+
+			main::INFOLOG && $log->is_info && $log->info(sprintf('Response time: %.3fs (average: %.3fs)', $responseTime, $avgResponseTimeInSecs));
+
+			if (!_useLRCProxy() && $responseTime > MAX_LAG_BEFORE_PROXYING_SECS) {
 				main::INFOLOG && $log->is_info && $log->info("LRCLib is taking a long time to respond - enabling proxying");
 				__PACKAGE__->enableProxying();
 			}
