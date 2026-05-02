@@ -430,7 +430,7 @@ PLUGIN_MUSICARTISTINFO_IMPORTER_PLACEHOLDER_1
 PLUGIN_MUSICARTISTINFO_IMPORTER_PLACEHOLDER_2
 	CS	Uložit zástupný soubor nejen pro hlavní interprety, ale pro všechny přispěvatele (skladatelé, solisté atd.).
 	DE	Speichere Platzhalter-Datei für alle Rollen (nicht nur Interpreten, sondern auch Dirigenten, Solisten etc.).
-	EN	Store placeholder not only for main artist, but all contributors (composers, soloists, etc.).
+	EN	Store placeholder not only for the main artist, but for all contributors (composers, soloists, etc.).
 	FR	Enregistrer un fichier "artiste.missing" non seulement pour l'artiste principal, mais aussi pour tous les contributeurs (compositeurs, solistes, etc.).
 	NL	Maak een bestand ("artist.missing") aan, niet alleen voor de artiest, maar voor alle uitvoerenden (componisten, solisten, enz.).
 
@@ -582,7 +582,7 @@ PLUGIN_MUSICARTISTINFO_CONTENT_LANGUAGE
 
 PLUGIN_MUSICARTISTINFO_CONTENT_LANGUAGE_DESC
 	CS	Bohužel nejsou všechny jazyky pro stažený obsah k dispozici. Pokud není k dispozici jazyk vašeho systému, bude použita angličtina. Můžete zvolit jiný jazyk než jazyk vašeho systému, pokud chcete.
-	DE	Leider sind Inhalte nicht in allen Sprachen verfügbar. Ist eine Sprache nicht unterstützt, wird Englisch verwendet. Hier können Sie wählen, welche Sprache Sie bevorzugen, falls Sie eine andere als die Systemsprache verwenden möchten..
+	DE	Leider sind Inhalte nicht in allen Sprachen verfügbar. Ist eine Sprache nicht unterstützt, wird Englisch verwendet. Hier können Sie wählen, welche Sprache Sie bevorzugen, falls Sie eine andere als die Systemsprache verwenden möchten.
 	EN	Unfortunately not all languages are available for the downloaded content. English will be used if your system language wasn't available. You can select a language different from your system's, if you prefer to do so.
 	FR	Malheureusement, toutes les langues ne sont pas disponibles pour le contenu téléchargé. L'anglais sera utilisé si la langue de votre système n'est pas disponible. Vous pouvez sélectionner une langue différente de celle de votre système, si vous le souhaitez.
 	NL	Helaas zijn niet alle talen beschikbaar voor de gedownloade inhoud. Als de taal van jouw systeem niet beschikbaar is, wordt Engels gebruikt. Je kan een andere taal dan die van jouw systeem selecteren, als je dat wilt.
