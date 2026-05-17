@@ -21,9 +21,10 @@ my $log = logger('plugin.musicartistinfo');
 my $prefs = preferences('plugin.musicartistinfo');
 
 my $lyricsProviderPipeline = [
+	'MAILyricsAPI',
 	# 'AZLyrics',
-	'LRCLibGet',
-	'LRCLibSearch',
+	# 'LRCLibGet',
+	# 'LRCLibSearch',
 	# 'ChartLyrics',
 	'Genius',
 	'GeniusNoDot',
@@ -256,29 +257,33 @@ sub getLyrics {
 }
 
 my $lyricsProvider = {
-	AZLyrics => sub {
-		require Plugins::MusicArtistInfo::Lyrics::AZLyrics;
-		Plugins::MusicArtistInfo::Lyrics::AZLyrics->getLyrics(@_);
+	MAILyricsAPI => sub {
+		my ($args, $cb) = @_;
+		Plugins::MusicArtistInfo::API->getLyrics($cb, $args);
 	},
+	# AZLyrics => sub {
+	# 	require Plugins::MusicArtistInfo::Lyrics::AZLyrics;
+	# 	Plugins::MusicArtistInfo::Lyrics::AZLyrics->getLyrics(@_);
+	# },
 	# no lookup, only tell LRCLib to use the proxy
-	LRCLibProxyEnable => sub {
-		my ($args, $scb) = @_;
-		require Plugins::MusicArtistInfo::Lyrics::LRCLib;
-		Plugins::MusicArtistInfo::Lyrics::LRCLib->enableProxying();
-		$scb->();
-	},
-	LRCLibGet => sub {
-		require Plugins::MusicArtistInfo::Lyrics::LRCLib;
-		Plugins::MusicArtistInfo::Lyrics::LRCLib->getLyrics(@_)
-	},
-	LRCLibSearch => sub {
-		require Plugins::MusicArtistInfo::Lyrics::LRCLib;
-		Plugins::MusicArtistInfo::Lyrics::LRCLib->searchLyrics(@_)
-	},
-	ChartLyrics => sub {
-		require Plugins::MusicArtistInfo::Lyrics::ChartLyrics;
-		Plugins::MusicArtistInfo::Lyrics::ChartLyrics->searchLyricsInDirect(@_);
-	},
+	# LRCLibProxyEnable => sub {
+	# 	my ($args, $scb) = @_;
+	# 	require Plugins::MusicArtistInfo::Lyrics::LRCLib;
+	# 	Plugins::MusicArtistInfo::Lyrics::LRCLib->enableProxying();
+	# 	$scb->();
+	# },
+	# LRCLibGet => sub {
+	# 	require Plugins::MusicArtistInfo::Lyrics::LRCLib;
+	# 	Plugins::MusicArtistInfo::Lyrics::LRCLib->getLyrics(@_)
+	# },
+	# LRCLibSearch => sub {
+	# 	require Plugins::MusicArtistInfo::Lyrics::LRCLib;
+	# 	Plugins::MusicArtistInfo::Lyrics::LRCLib->searchLyrics(@_)
+	# },
+	# ChartLyrics => sub {
+	# 	require Plugins::MusicArtistInfo::Lyrics::ChartLyrics;
+	# 	Plugins::MusicArtistInfo::Lyrics::ChartLyrics->searchLyricsInDirect(@_);
+	# },
 	Genius => sub {
 		require Plugins::MusicArtistInfo::Lyrics::Genius;
 		Plugins::MusicArtistInfo::Lyrics::Genius->getLyrics(@_);

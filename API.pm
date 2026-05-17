@@ -15,6 +15,7 @@ use constant BASE_URL => 'https://api.lms-community.org/music';
 use constant ARTISTIMAGESEARCH_URL => BASE_URL . '/artist/%s/picture';
 use constant ALBUMREVIEW_URL => BASE_URL . '/album/%s/%s/review';
 use constant TRACKREVIEW_URL => BASE_URL . '/track/%s/%s/review';
+use constant LYRICS_URL      => BASE_URL . '/track/%s/%s/lyrics';
 use constant ALBUMGENRES_URL => BASE_URL . '/album/%s/%s/genres';
 use constant BIOGRAPHY_URL   => BASE_URL . '/artist/%s/biography';
 use constant WORKREVIEW_URL  => BASE_URL . '/work/%s/%s/review';
@@ -188,6 +189,32 @@ sub getWorkReviewId {
 			$cb->($result);
 		}
 	);
+}
+
+sub getLyrics {
+	my ( $class, $cb, $args ) = @_;
+
+	my @queryParams;
+	push @queryParams, 'duration=' . $args->{duration} if $args->{duration} && $args->{duration} =~ /^\d+\.?\d*$/;
+	push @queryParams, 'album=' . uri_escape_utf8($args->{album}) if $args->{album};
+
+	my $query = @queryParams ? '?' . join('&', @queryParams) : '';
+
+	my $url = sprintf(LYRICS_URL, uri_escape_utf8($args->{title}), uri_escape_utf8($args->{artist})) . $query;
+
+	_call(
+		$url,
+		sub {
+			my ($result) = @_;
+			main::INFOLOG && $log->is_info && $log->info("found lyrics: " . Data::Dump::dump($result));
+
+			if ($result && $result->{instrumental}) {
+				$result->{lyrics} = Slim::Utils::Strings::string('PLUGIN_MUSICARTISTINFO_INSTRUMENTAL');
+			}
+
+			$cb->($result);
+		}
+	)
 }
 
 sub getLyricsProviders {
